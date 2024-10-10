@@ -3,6 +3,7 @@ import path from "path";
 import { fileURLToPath } from "url";
 import { navRouter } from "./routes/main.js";
 import { postRouter } from "./routes/posts.js";
+import { authRouter } from "./routes/auth.js";
 import { errorHandler } from "./middleware/errorHandler.js";
 
 const app = express();
@@ -20,6 +21,7 @@ app.use(express.urlencoded({ extended: false }));
 // ROUTES
 app.use(navRouter);
 app.use("/posts", postRouter);
+app.use("/auth", authRouter); // Add auth routes
 
 // ERROR HANDLING
 
