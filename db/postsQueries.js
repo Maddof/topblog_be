@@ -13,18 +13,58 @@ const getAllPublishedPosts = async () => {
   }
 };
 
-const createSinglePost = async (title, content, pubStatus) => {
+const getAllPosts = async () => {
   try {
-    const createPost = await prisma.create({
+    const allPosts = await prisma.post.findMany();
+    return allPosts;
+  } catch (error) {
+    console.error("Could not get all posts", error);
+  }
+};
+
+const createSinglePost = async (title, content, pubStatus, authorId) => {
+  try {
+    const newPost = await prisma.post.create({
       data: {
         title,
         content,
         published: pubStatus,
+        publishedAt: pubStatus ? new Date() : null, // Set publishedAt if published
+        author: {
+          connect: { id: authorId },
+        },
       },
     });
+    return newPost;
   } catch (error) {
     console.error("Error getting creating post", error);
+    throw error;
   }
 };
 
-export { getAllPublishedPosts, createSinglePost };
+const updateSinglePost = async (id, title, content, published) => {
+  try {
+    const updatedPost = await prisma.post.update({
+      where: {
+        id: parseInt(id),
+      },
+      data: {
+        title,
+        content,
+        published,
+        publishedAt: published ? new Date() : null, // Update publishedAt when published
+      },
+    });
+    return updatedPost;
+  } catch (error) {
+    console.error("Error updating post", error);
+    throw error;
+  }
+};
+
+export {
+  getAllPublishedPosts,
+  createSinglePost,
+  getAllPosts,
+  updateSinglePost,
+};
