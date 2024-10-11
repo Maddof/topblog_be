@@ -1,5 +1,6 @@
 import express from "express";
 import path from "path";
+import cookieParser from "cookie-parser";
 import { fileURLToPath } from "url";
 import { navRouter } from "./routes/main.js";
 import { postRouter } from "./routes/posts.js";
@@ -19,6 +20,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 // ROUTES
+app.use(cookieParser());
 app.use(navRouter);
 app.use("/posts", postRouter);
 app.use("/auth", authRouter); // Add auth routes

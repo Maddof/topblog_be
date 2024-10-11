@@ -1,6 +1,6 @@
 import bcrypt from "bcryptjs";
 import prisma from "../db/prismaClient.js"; // Assuming you have this setup for Prisma
-import { generateToken } from "../utils/tokenGenerator.js";
+import { generateTokens } from "../utils/tokenGenerator.js";
 import { findUserByEmail, createUser } from "../db/userQueries.js";
 
 // Function to handle user registration
@@ -56,13 +56,22 @@ const login = async (req, res) => {
       return res.status(401).json({ error: "Invalid email or password" });
     }
 
-    // Generate a JWT token
-    const token = generateToken(user);
+    // Generate access and refresh tokens
+    const { accessToken, refreshToken } = generateTokens(user);
 
-    // Return the token to the client
+    // Set refresh token in HttpOnly cookie (ensure to configure cookie options properly)
+    res.cookie("refreshToken", refreshToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production", // Only use 'secure' in production
+      sameSite: "Strict", // Mitigate CSRF
+      maxAge: 1 * 24 * 60 * 60 * 1000, // 1 day
+    });
+
+    // Send access token as JSON (client stores it in memory or local storage)
+
     res.status(200).json({
       message: "Login successful",
-      token,
+      accessToken,
     });
   } catch (error) {
     console.error("Login error:", error);
@@ -70,4 +79,9 @@ const login = async (req, res) => {
   }
 };
 
-export { login, registerUser };
+const logout = (req, res) => {
+  res.clearCookie("refreshToken");
+  return res.status(200).json({ message: "Logout successful" });
+};
+
+export { login, registerUser, logout };

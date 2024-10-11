@@ -1,9 +1,11 @@
 import express from "express";
-import { login, registerUser } from "../controllers/authController.js";
+import { login, logout, registerUser } from "../controllers/authController.js";
 import {
   registerValidationRules,
   validateUser,
 } from "../validators/userValidator.js";
+import { refreshAccessToken } from "../middleware/verifyAndRefreshToken.js";
+import { loginLimiter } from "../config/rateLimiter.js";
 
 const authRouter = express.Router();
 
@@ -16,8 +18,17 @@ authRouter.post(
   registerUser
 );
 
-// @desc Login and generates token
+// @desc Login and generates token, middleware to limit login attempts.
 // @route POST /auth/login
-authRouter.post("/login", login);
+authRouter.post("/login", loginLimiter, login);
+
+// @desc Logs out and clears cookie
+// @route POST /auth/logout
+
+authRouter.post("/logout", logout);
+
+// @desc Refreshes access token
+// @route POST /auth/refresh-token
+authRouter.post("/refresh-token", refreshAccessToken);
 
 export { authRouter };

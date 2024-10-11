@@ -1,9 +1,12 @@
 import jwt from "jsonwebtoken";
 
+const accessTokenExpiry = process.env.ACCESS_TOKEN_EXPIRY_15M || "15m";
+const refreshTokenExpiry = process.env.REFRESH_TOKEN_EXPIRY_7D || "7d";
+
 const JWT_SECRET = process.env.JWT_SECRET;
 
 // Function to generate a JWT
-const generateToken = (user) => {
+const generateTokens = (user) => {
   // Payload data: You can add more user-specific data as needed.
   const payload = {
     userId: user.id,
@@ -12,7 +15,18 @@ const generateToken = (user) => {
   };
 
   // Sign the token with the payload and secret key, and set an expiration time (e.g., 1 hour)
-  return jwt.sign(payload, JWT_SECRET, { expiresIn: "1h" });
+
+  // Short-lived access token
+  const accessToken = jwt.sign(payload, JWT_SECRET, {
+    expiresIn: accessTokenExpiry,
+  });
+
+  // Long-lived refresh token
+  const refreshToken = jwt.sign(payload, JWT_SECRET, {
+    expiresIn: refreshTokenExpiry,
+  });
+
+  return { accessToken, refreshToken };
 };
 
-export { generateToken };
+export { generateTokens };
