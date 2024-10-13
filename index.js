@@ -6,6 +6,7 @@ import { navRouter } from "./routes/main.js";
 import { postRouter } from "./routes/posts.js";
 import { authRouter } from "./routes/auth.js";
 import { errorHandler } from "./middleware/errorHandler.js";
+import cors from "cors";
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -14,6 +15,9 @@ const PORT = process.env.PORT || 5000;
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+
+// Connect//Express middleware to enable cors
+// app.use(cors());
 
 // BODY PARSER MIDDLEWARE
 app.use(express.json());

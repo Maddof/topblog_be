@@ -1,6 +1,6 @@
 import jwt from "jsonwebtoken";
 
-const accessTokenExpiry = process.env.ACCESS_TOKEN_EXPIRY_15M || "15m";
+const accessTokenExpiry = process.env.ACCESS_TOKEN_EXPIRY_15M || "30m";
 const refreshTokenExpiry = process.env.REFRESH_TOKEN_EXPIRY_7D || "7d";
 
 const JWT_SECRET = process.env.JWT_SECRET;
@@ -13,6 +13,8 @@ const generateTokens = (user) => {
     username: user.username,
     role: user.role, // Optional, but helpful if you need role-based access
   };
+
+  console.log(payload);
 
   // Sign the token with the payload and secret key, and set an expiration time (e.g., 1 hour)
 

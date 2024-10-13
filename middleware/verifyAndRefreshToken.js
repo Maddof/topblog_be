@@ -1,7 +1,6 @@
 import jwt from "jsonwebtoken";
 
 const JWT_SECRET = process.env.JWT_SECRET;
-
 const accessTokenExpiry = process.env.ACCESS_TOKEN_EXPIRY_15M || "15m";
 
 // Middleware to verify the JWT token
@@ -21,6 +20,7 @@ const verifyToken = (req, res, next) => {
 
     // If the token is valid, attach the decoded payload (user data) to the request
     req.user = decoded;
+    console.log(req.user);
     next();
   });
 };
@@ -37,6 +37,8 @@ const refreshAccessToken = (req, res) => {
   jwt.verify(refreshToken, JWT_SECRET, (err, user) => {
     if (err) return res.status(403).json({ error: "Invalid refresh token" });
 
+    console.log("Refreshed user id: ");
+    console.log(user);
     // Generate new access token
     const newAccessToken = jwt.sign(
       { userId: user.id, username: user.username, role: user.role },

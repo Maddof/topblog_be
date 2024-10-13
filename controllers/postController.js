@@ -34,7 +34,8 @@ const posts = {
   create: async (req, res) => {
     try {
       const { title, content, published = false } = req.body;
-      const authorId = 1; // Replace this with the actual authorId from the authenticated user
+      console.log(req.user);
+      const authorId = req.user.userId;
 
       // Create the post using Prisma
       const newPost = await createSinglePost(
