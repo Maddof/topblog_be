@@ -22,6 +22,10 @@ postRouter.get("/", posts.all);
 // @route GET /posts/public/
 postRouter.get("/public/", posts.allPublished);
 
+// @desc Get a single post and associated comments by postId
+// @route GET /posts/:postId
+postRouter.get("/:postId", posts.getSingle);
+
 // @desc Create new post
 // @route POST /posts/
 postRouter.post(

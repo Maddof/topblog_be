@@ -3,6 +3,7 @@ import {
   getAllPosts,
   createSinglePost,
   updateSinglePost,
+  findPostAndCommentsByPostId,
 } from "../db/postsQueries.js";
 
 const posts = {
@@ -27,6 +28,29 @@ const posts = {
       });
     } catch (error) {
       return next(error);
+    }
+  },
+
+  // Method to fetch a single post by ID
+  getSingle: async (req, res) => {
+    try {
+      const postId = parseInt(req.params.postId);
+
+      const post = await findPostAndCommentsByPostId(postId);
+
+      if (!post) {
+        return res.status(404).json({
+          message: "Post not found",
+        });
+      }
+
+      res.status(200).json({
+        message: "Post fetched successfully",
+        post,
+      });
+    } catch (error) {
+      console.error("Error fetching post:", error);
+      res.status(500).json({ error: "Internal server error" });
     }
   },
 

@@ -34,6 +34,21 @@ const findUniquePost = async (postId) => {
   }
 };
 
+const findPostById = async (postId) => {
+  try {
+    const post = await prisma.post.findUnique({
+      where: { id: postId },
+      include: {
+        comments: true, // Optionally include comments for the post if needed
+      },
+    });
+    return post;
+  } catch (error) {
+    console.error("Error fetching post by ID:", error);
+    throw error;
+  }
+};
+
 const createSinglePost = async (title, content, pubStatus, authorId) => {
   try {
     const newPost = await prisma.post.create({
@@ -80,4 +95,5 @@ export {
   getAllPosts,
   updateSinglePost,
   findUniquePost,
+  findPostById,
 };
