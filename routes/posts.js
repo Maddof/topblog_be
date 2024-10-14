@@ -5,12 +5,12 @@ import {
   postValidationRules,
   validatePost,
 } from "../validators/postValidator.js";
-
 import {
   commentValidationRules,
   validateComment,
 } from "../validators/commentsValidator.js";
 import { verifyToken } from "../middleware/verifyAndRefreshToken.js";
+import { verifyAdmin } from "../middleware/verifyAdmin.js";
 
 const postRouter = express.Router();
 
@@ -36,6 +36,11 @@ postRouter.post(
 // @route PUT /posts/:postId
 postRouter.put("/:postId", verifyToken, posts.update);
 
+// @desc Get all comments per post
+// @route GET /posts/:postId/comments/
+
+postRouter.get("/:postId/comments/", comments.allPerPost);
+
 // @desc Create a new comment
 // @route POST /posts/:postId/newComment
 
@@ -44,6 +49,16 @@ postRouter.post(
   commentValidationRules(),
   validateComment,
   comments.create
+);
+
+// @desc Delete a comment
+// @route DELETE /posts/:postId/newComment
+
+postRouter.delete(
+  "/:postId/comments/:commentId",
+  verifyToken,
+  verifyAdmin,
+  comments.delete
 );
 
 export { postRouter };

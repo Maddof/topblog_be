@@ -14,8 +14,6 @@ const generateTokens = (user) => {
     role: user.role, // Optional, but helpful if you need role-based access
   };
 
-  console.log(payload);
-
   // Sign the token with the payload and secret key, and set an expiration time (e.g., 1 hour)
 
   // Short-lived access token

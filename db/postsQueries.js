@@ -49,7 +49,7 @@ const createSinglePost = async (title, content, pubStatus, authorId) => {
     });
     return newPost;
   } catch (error) {
-    console.error("Error getting creating post", error);
+    console.error("Error creating post", error);
     throw error;
   }
 };
