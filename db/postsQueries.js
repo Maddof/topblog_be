@@ -34,17 +34,36 @@ const findUniquePost = async (postId) => {
   }
 };
 
-const findPostById = async (postId) => {
+const findPostAndCommentsByPostId = async (postId) => {
   try {
     const post = await prisma.post.findUnique({
       where: { id: postId },
       include: {
-        comments: true, // Optionally include comments for the post if needed
+        author: {
+          // Include the author of the post
+          select: {
+            username: true,
+            email: true,
+          },
+        },
+        comments: {
+          orderBy: {
+            createdAt: "desc",
+          },
+          // Include the comments for the post
+          select: {
+            id: true,
+            content: true,
+            createdAt: true,
+            guestName: true,
+            guestEmail: true,
+          },
+        },
       },
     });
     return post;
   } catch (error) {
-    console.error("Error fetching post by ID:", error);
+    console.error("Error fetching post, author, and comments", error);
     throw error;
   }
 };
@@ -95,5 +114,5 @@ export {
   getAllPosts,
   updateSinglePost,
   findUniquePost,
-  findPostById,
+  findPostAndCommentsByPostId,
 };

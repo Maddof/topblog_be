@@ -10,20 +10,8 @@ const commentValidationRules = () => {
       .withMessage("Content must be at least 5 characters long")
       .trim()
       .escape(),
-    body("gName")
-      .notEmpty()
-      .withMessage("Content is required")
-      .isLength({ min: 10 })
-      .withMessage("Content must be at least 10 characters long")
-      .trim()
-      .escape(),
-    body("gEmail")
-      .notEmpty()
-      .withMessage("Content is required")
-      .isLength({ min: 10 })
-      .withMessage("Content must be at least 10 characters long")
-      .trim()
-      .escape(),
+    body("gName").trim().escape(),
+    body("gEmail").trim().escape(),
   ];
 };
 

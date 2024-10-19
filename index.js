@@ -17,7 +17,12 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 // Connect//Express middleware to enable cors
-// app.use(cors());
+app.use(
+  cors({
+    origin: ["http://localhost:5173"],
+    credentials: true,
+  })
+);
 
 // BODY PARSER MIDDLEWARE
 app.use(express.json());
