@@ -48,6 +48,7 @@ const refreshAccessToken = (req, res) => {
 
     res.status(200).json({
       accessToken: newAccessToken,
+      role: user.role,
     });
   });
 };
