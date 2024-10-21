@@ -1,4 +1,5 @@
 import {
+  getAllComments,
   createSingleComment,
   deleteSingleComment,
   findCommentsByPostId,
@@ -6,6 +7,23 @@ import {
 import { findUniquePost } from "../db/postsQueries.js";
 
 const comments = {
+  all: async (req, res) => {
+    try {
+      const allComments = await getAllComments();
+      if (!comments)
+        return res.status(404).json({ error: "Comments not found" });
+
+      res.status(200).json({
+        message: "Comments fetched successfully",
+        count: allComments.length, // Return the length of the comments array
+        comments: allComments,
+      });
+    } catch (error) {
+      console.error("Error fetching comments", error);
+      res.status(500).json({ error: "Internal server error" });
+    }
+  },
+
   create: async (req, res) => {
     try {
       const { content, gName, gEmail } = req.body;

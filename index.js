@@ -4,6 +4,7 @@ import cookieParser from "cookie-parser";
 import { fileURLToPath } from "url";
 import { navRouter } from "./routes/main.js";
 import { postRouter } from "./routes/posts.js";
+import { commentRouter } from "./routes/comments.js";
 import { authRouter } from "./routes/auth.js";
 import { errorHandler } from "./middleware/errorHandler.js";
 import cors from "cors";
@@ -32,6 +33,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(navRouter);
 app.use("/posts", postRouter);
+app.use("/comments", commentRouter);
 app.use("/auth", authRouter); // Add auth routes
 
 // ERROR HANDLING

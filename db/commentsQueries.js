@@ -1,5 +1,20 @@
 import prisma from "./prismaClient.js";
 
+const getAllComments = async () => {
+  try {
+    // Query to find all comments associated with a given post
+    const comments = await prisma.comment.findMany({
+      orderBy: {
+        createdAt: "desc", // Optionally, order by creation time (descending or ascending)
+      },
+    });
+    return comments;
+  } catch (error) {
+    console.error("Error getting all comments", error);
+    throw error;
+  }
+};
+
 const createSingleComment = async (content, gName, gEmail, postId) => {
   try {
     const newComment = await prisma.comment.create({
@@ -63,4 +78,9 @@ const findCommentsByPostId = async (postId) => {
   }
 };
 
-export { createSingleComment, deleteSingleComment, findCommentsByPostId };
+export {
+  getAllComments,
+  createSingleComment,
+  deleteSingleComment,
+  findCommentsByPostId,
+};
