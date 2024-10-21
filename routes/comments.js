@@ -17,6 +17,6 @@ const commentRouter = express.Router();
 // @desc Get all comments
 // @route GET /comments/
 
-commentRouter.get("/", comments.allPerPost);
+commentRouter.get("/", comments.all);
 
 export { commentRouter };
