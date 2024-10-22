@@ -31,8 +31,8 @@ postRouter.get("/:postId", posts.getSingle);
 postRouter.post(
   "/",
   verifyToken,
-  // postValidationRules(),
-  // validatePost,
+  postValidationRules(),
+  validatePost,
   posts.create
 );
 
