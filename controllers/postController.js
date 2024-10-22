@@ -57,9 +57,6 @@ const posts = {
   // Method to create a post
   create: async (req, res) => {
     try {
-      console.log("LOGS FROM CREATE CONTROLLER: ");
-      console.log(req.body);
-      console.log(req.user);
       const { title, content, published = false } = req.body;
       const authorId = req.user.userId;
 
