@@ -21,10 +21,18 @@ const posts = {
 
   // Method to get all published posts
   allPublished: async (req, res, next) => {
+    const { page = 1, limit = 2 } = req.query; // Default to page 1, 10 comments per page
     try {
-      const allPosts = await getAllPublishedPosts();
-      res.json({
+      const { allPosts, totalPosts } = await getAllPublishedPosts(
+        Number(page),
+        Number(limit)
+      );
+      res.status(200).json({
         posts: allPosts,
+        count: allPosts.length,
+        totalPages: Math.ceil(totalPosts / limit), // Total number of pages
+        totalPosts,
+        currentPage: page,
       });
     } catch (error) {
       return next(error);

@@ -1,13 +1,27 @@
 import prisma from "./prismaClient.js";
 
-const getAllPublishedPosts = async () => {
+const getAllPublishedPosts = async (page, limit) => {
+  const skip = (page - 1) * limit; // Calculate how many posts to skip
+  const take = limit; // Limit number of posts per page
   try {
     const allPosts = await prisma.post.findMany({
+      skip: skip,
+      take: take,
+      where: {
+        published: true,
+      },
+      orderBy: {
+        createdAt: "desc",
+      },
+    });
+
+    // Optionally, get the total count of posts for pagination metadata
+    const totalPosts = await prisma.post.count({
       where: {
         published: true,
       },
     });
-    return allPosts;
+    return { allPosts, totalPosts };
   } catch (error) {
     console.error("Error getting all posts", error);
   }
