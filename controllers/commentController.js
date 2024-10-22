@@ -1,5 +1,6 @@
 import {
   getAllComments,
+  getPaginatedComments,
   createSingleComment,
   deleteSingleComment,
   findCommentsByPostId,
@@ -20,6 +21,32 @@ const comments = {
       });
     } catch (error) {
       console.error("Error fetching comments", error);
+      res.status(500).json({ error: "Internal server error" });
+    }
+  },
+
+  allPaginated: async (req, res) => {
+    const { page = 1, limit = 10 } = req.query; // Default to page 1, 10 comments per page
+
+    try {
+      const { comments, totalComments } = await getPaginatedComments(
+        Number(page),
+        Number(limit)
+      );
+
+      if (!comments.length)
+        return res.status(404).json({ error: "No comments found" });
+
+      res.status(200).json({
+        message: "Comments fetched successfully",
+        count: comments.length,
+        totalComments, // Total number of comments
+        comments,
+        totalPages: Math.ceil(totalComments / limit), // Total number of pages
+        currentPage: page,
+      });
+    } catch (error) {
+      console.error("Error fetching paginated comments", error);
       res.status(500).json({ error: "Internal server error" });
     }
   },

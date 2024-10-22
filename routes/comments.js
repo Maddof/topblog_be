@@ -1,16 +1,5 @@
 import express from "express";
-import { posts } from "../controllers/postController.js";
 import { comments } from "../controllers/commentController.js";
-import {
-  postValidationRules,
-  validatePost,
-} from "../validators/postValidator.js";
-import {
-  commentValidationRules,
-  validateComment,
-} from "../validators/commentsValidator.js";
-import { verifyToken } from "../middleware/verifyAndRefreshToken.js";
-import { verifyAdmin } from "../middleware/verifyAdmin.js";
 
 const commentRouter = express.Router();
 
@@ -18,5 +7,10 @@ const commentRouter = express.Router();
 // @route GET /comments/
 
 commentRouter.get("/", comments.all);
+
+// @desc Get all comments
+// @route GET /comments/paginated/
+
+commentRouter.get("/paginated/", comments.allPaginated);
 
 export { commentRouter };

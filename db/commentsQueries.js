@@ -15,6 +15,29 @@ const getAllComments = async () => {
   }
 };
 
+const getPaginatedComments = async (page, limit) => {
+  const skip = (page - 1) * limit; // Calculate how many comments to skip
+  const take = limit; // Limit the number of comments per page
+
+  try {
+    const comments = await prisma.comment.findMany({
+      skip: skip,
+      take: take,
+      orderBy: {
+        createdAt: "desc",
+      },
+    });
+
+    // Optionally, get the total count of comments for pagination metadata
+    const totalComments = await prisma.comment.count();
+
+    return { comments, totalComments };
+  } catch (error) {
+    console.error("Error getting paginated comments", error);
+    throw error;
+  }
+};
+
 const createSingleComment = async (content, gName, gEmail, postId) => {
   try {
     const newComment = await prisma.comment.create({
@@ -80,6 +103,7 @@ const findCommentsByPostId = async (postId) => {
 
 export {
   getAllComments,
+  getPaginatedComments,
   createSingleComment,
   deleteSingleComment,
   findCommentsByPostId,
