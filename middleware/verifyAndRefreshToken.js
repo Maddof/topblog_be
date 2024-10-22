@@ -20,6 +20,7 @@ const verifyToken = (req, res, next) => {
 
     // If the token is valid, attach the decoded payload (user data) to the request
     req.user = decoded;
+    console.log("LOG FROM VERIFY TOKEN: ");
     console.log(req.user);
     next();
   });
@@ -41,7 +42,7 @@ const refreshAccessToken = (req, res) => {
     console.log(user);
     // Generate new access token
     const newAccessToken = jwt.sign(
-      { userId: user.id, username: user.username, role: user.role },
+      { userId: user.userId, username: user.username, role: user.role },
       JWT_SECRET,
       { expiresIn: accessTokenExpiry }
     );
