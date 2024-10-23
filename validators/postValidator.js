@@ -14,9 +14,7 @@ const postValidationRules = () => {
       .notEmpty()
       .withMessage("Content is required")
       .isLength({ min: 10 })
-      .withMessage("Content must be at least 10 characters long")
-      .trim()
-      .escape(),
+      .withMessage("Content must be at least 10 characters long"),
   ];
 };
 

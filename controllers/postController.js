@@ -6,6 +6,8 @@ import {
   findPostAndCommentsByPostId,
 } from "../db/postsQueries.js";
 
+import sanitizeHtml from "../utils/purifyDom.js";
+
 const posts = {
   // Method to get all posts from the database
   all: async (req, res, next) => {
@@ -65,13 +67,14 @@ const posts = {
   // Method to create a post
   create: async (req, res) => {
     try {
-      const { title, content, published = false } = req.body;
+      const sanitizedContent = sanitizeHtml(req.body.content);
+      const { title, published = false } = req.body;
       const authorId = req.user.userId;
 
       // Create the post using Prisma
       const newPost = await createSinglePost(
         title,
-        content,
+        sanitizedContent,
         published,
         authorId
       );
