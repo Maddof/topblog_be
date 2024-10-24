@@ -5,7 +5,7 @@ import {
   deleteSingleComment,
   findCommentsByPostId,
 } from "../db/commentsQueries.js";
-import { findUniquePost } from "../db/postsQueries.js";
+import PostService from "../db/postsQueries.js";
 
 const comments = {
   all: async (req, res) => {
@@ -58,7 +58,7 @@ const comments = {
       const postId = req.params.postId;
 
       // Check if post exists
-      const post = await findUniquePost(postId);
+      const post = await PostService.findUniquePost(postId);
       if (!post) return res.status(404).json({ error: "Post not found" });
 
       // Creates the comment using prisma

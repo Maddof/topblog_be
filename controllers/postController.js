@@ -1,21 +1,22 @@
-import {
-  getAllPublishedPosts,
-  getAllPosts,
-  createSinglePost,
-  updateSinglePost,
-  findPostAndCommentsByPostId,
-  deleteSinglePost,
-} from "../db/postsQueries.js";
+import PostService from "../db/postsQueries.js";
 
 import sanitizeHtml from "../utils/purifyDom.js";
 
 const posts = {
   // Method to get all posts from the database
   all: async (req, res, next) => {
+    const { page = 1, limit = 5 } = req.query; // Default to page 1, 5 posts per page
     try {
-      const allPosts = await getAllPosts();
-      res.json({
+      const { allPosts, totalPosts } = await PostService.getAllPosts(
+        Number(page),
+        Number(limit)
+      );
+      res.status(200).json({
         posts: allPosts,
+        count: allPosts.length,
+        totalPages: Math.ceil(totalPosts / limit), // Total number of pages
+        totalPosts,
+        currentPage: page,
       });
     } catch (error) {
       return next(error);
@@ -26,7 +27,7 @@ const posts = {
   allPublished: async (req, res, next) => {
     const { page = 1, limit = 5 } = req.query; // Default to page 1, 5 posts per page
     try {
-      const { allPosts, totalPosts } = await getAllPublishedPosts(
+      const { allPosts, totalPosts } = await PostService.getAllPublishedPosts(
         Number(page),
         Number(limit)
       );
@@ -47,7 +48,7 @@ const posts = {
     try {
       const postId = parseInt(req.params.postId);
 
-      const post = await findPostAndCommentsByPostId(postId);
+      const post = await PostService.findPostAndCommentsByPostId(postId);
 
       if (!post) {
         return res.status(404).json({
@@ -73,7 +74,7 @@ const posts = {
       const authorId = req.user.userId;
 
       // Create the post using Prisma
-      const newPost = await createSinglePost(
+      const newPost = await PostService.createSinglePost(
         title,
         sanitizedContent,
         published,
@@ -94,7 +95,7 @@ const posts = {
     try {
       const { postId } = req.params;
       const { title, content, published = false } = req.body;
-      const updatedPost = await updateSinglePost(
+      const updatedPost = await PostService.updateSinglePost(
         postId,
         title,
         content,
@@ -112,17 +113,11 @@ const posts = {
 
   delete: async (req, res, next) => {
     try {
-      const { postId } = req.params;
-      const { title, content, published = false } = req.body;
-      const updatedPost = await updateSinglePost(
-        postId,
-        title,
-        content,
-        published
-      );
+      const postId = parseInt(req.params.postId);
+      const deletedPost = await PostService.deleteSinglePost(postId);
       res.status(201).json({
-        message: "Post updated successfully",
-        post: updatedPost,
+        message: "Post deleted successfully",
+        post: deletedPost,
       });
     } catch (error) {
       console.error("Error updating post:", error);

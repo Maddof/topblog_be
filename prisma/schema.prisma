@@ -41,7 +41,7 @@ model Comment {
   createdAt  DateTime @default(now())
   guestName  String? // Allow for guest username (optional)
   guestEmail String? // Allow for guest email (optional)
-  post       Post     @relation(fields: [postId], references: [id])
+  post       Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
   postId     Int
 }
 
