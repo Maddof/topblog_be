@@ -122,6 +122,31 @@ const updateSinglePost = async (id, title, content, published) => {
   }
 };
 
+const deleteSinglePost = async (postId) => {
+  try {
+    // First, check if the post exists
+    const existingComment = await prisma.comment.findFirst({
+      where: {
+        id: postId,
+      },
+    });
+
+    if (!existingComment) {
+      return null; // If not found, return null to indicate the comment doesn't exist for the post
+    }
+
+    // Delete the found comment
+    await prisma.comment.delete({
+      where: { id: existingComment.id },
+    });
+
+    return existingComment; // Return the original comment or confirmation if needed
+  } catch (error) {
+    console.error("Error deleting post", error);
+    throw error;
+  }
+};
+
 export {
   getAllPublishedPosts,
   createSinglePost,
@@ -129,4 +154,5 @@ export {
   updateSinglePost,
   findUniquePost,
   findPostAndCommentsByPostId,
+  deleteSinglePost,
 };

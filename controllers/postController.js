@@ -4,6 +4,7 @@ import {
   createSinglePost,
   updateSinglePost,
   findPostAndCommentsByPostId,
+  deleteSinglePost,
 } from "../db/postsQueries.js";
 
 import sanitizeHtml from "../utils/purifyDom.js";
@@ -23,7 +24,7 @@ const posts = {
 
   // Method to get all published posts
   allPublished: async (req, res, next) => {
-    const { page = 1, limit = 2 } = req.query; // Default to page 1, 10 comments per page
+    const { page = 1, limit = 5 } = req.query; // Default to page 1, 5 posts per page
     try {
       const { allPosts, totalPosts } = await getAllPublishedPosts(
         Number(page),
@@ -90,6 +91,26 @@ const posts = {
   },
 
   update: async (req, res, next) => {
+    try {
+      const { postId } = req.params;
+      const { title, content, published = false } = req.body;
+      const updatedPost = await updateSinglePost(
+        postId,
+        title,
+        content,
+        published
+      );
+      res.status(201).json({
+        message: "Post updated successfully",
+        post: updatedPost,
+      });
+    } catch (error) {
+      console.error("Error updating post:", error);
+      res.status(500).json({ error: "Internal server error" });
+    }
+  },
+
+  delete: async (req, res, next) => {
     try {
       const { postId } = req.params;
       const { title, content, published = false } = req.body;

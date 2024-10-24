@@ -40,6 +40,10 @@ postRouter.post(
 // @route PUT /posts/:postId
 postRouter.put("/:postId", verifyToken, posts.update);
 
+// @desc Delete a post
+// @route DELETE /posts/:postId
+postRouter.delete("/:postId", verifyToken, verifyAdmin, posts.delete);
+
 // @desc Get all comments per post
 // @route GET /posts/:postId/comments/
 
