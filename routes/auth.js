@@ -20,7 +20,7 @@ authRouter.post(
 
 // @desc Login and generates token, middleware to limit login attempts.
 // @route POST /auth/login
-authRouter.post("/login", login); // ADD loginlimiter after testing
+authRouter.post("/login", loginLimiter, login); // ADD loginlimiter after testing
 
 // @desc Logs out and clears cookie
 // @route POST /auth/logout

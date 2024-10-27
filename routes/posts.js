@@ -11,6 +11,7 @@ import {
 } from "../validators/commentsValidator.js";
 import { verifyToken } from "../middleware/verifyAndRefreshToken.js";
 import { verifyAdmin } from "../middleware/verifyAdmin.js";
+import { postLimiter } from "../config/rateLimiter.js";
 
 const postRouter = express.Router();
 
@@ -38,7 +39,7 @@ postRouter.post(
 
 // @desc Update a post
 // @route PUT /posts/:postId
-postRouter.put("/:postId", verifyToken, posts.update);
+postRouter.put("/:postId", verifyToken, verifyAdmin, posts.update);
 
 // @desc Delete a post
 // @route DELETE /posts/:postId
@@ -56,6 +57,7 @@ postRouter.post(
   "/:postId/newComment",
   commentValidationRules(),
   validateComment,
+  postLimiter,
   comments.create
 );
 
