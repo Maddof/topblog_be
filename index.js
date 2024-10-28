@@ -12,6 +12,9 @@ import cors from "cors";
 const app = express();
 const PORT = process.env.PORT || 5000;
 
+// Enable trust proxy for express-rate-limit to correctly identify client IPs
+app.set("trust proxy", 1); // Trust the first proxy in front of the app
+
 // Get directory & file names using ES module compatible methods
 
 const __filename = fileURLToPath(import.meta.url);
