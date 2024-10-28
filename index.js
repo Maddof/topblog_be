@@ -23,7 +23,7 @@ app.use(
     origin: [
       "http://localhost:5173",
       "http://localhost:4173",
-      "https://topblogfe.netlify.app/",
+      "https://topblogfe.netlify.app",
     ],
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE"],
