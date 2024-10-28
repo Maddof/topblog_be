@@ -20,7 +20,11 @@ const __dirname = path.dirname(__filename);
 // Connect//Express middleware to enable cors
 app.use(
   cors({
-    origin: ["http://localhost:5173", "http://localhost:4173"],
+    origin: [
+      "http://localhost:5173",
+      "http://localhost:4173",
+      "https://topblogfe.netlify.app/",
+    ],
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE"],
     allowedHeaders: ["Content-Type", "Authorization"],
