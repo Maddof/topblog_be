@@ -2,6 +2,9 @@
 
 The backend for **TopBlog** provides a RESTful API for managing blog posts, comments, and user authentication. This server is built with **Express.js** and uses **Prisma** as the ORM to interact with a PostgreSQL database, along with JWT for secure user authentication.
 
+You can test site with:
+admindemo@admindemo.com / admindemo
+
 ## Table of Contents
 
 - [Tech Stack](#tech-stack)
