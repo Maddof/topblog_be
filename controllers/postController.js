@@ -14,8 +14,8 @@ const posts = {
       res.status(200).json({
         posts: allPosts,
         count: allPosts.length,
-        totalPages: Math.ceil(totalPosts / limit), // Total number of pages
         totalPosts,
+        totalPages: totalPosts > 0 ? Math.ceil(totalPosts / limit) : 1, // Total number of pages
         currentPage: page,
       });
     } catch (error) {

@@ -34,15 +34,15 @@ const comments = {
         Number(limit)
       );
 
-      if (!comments.length)
-        return res.status(404).json({ error: "No comments found" });
+      // if (!comments.length)
+      //   return res.status(404).json({ error: "No comments found" });
 
       res.status(200).json({
         message: "Comments fetched successfully",
         count: comments.length,
         totalComments, // Total number of comments
         comments,
-        totalPages: Math.ceil(totalComments / limit), // Total number of pages
+        totalPages: totalComments > 0 ? Math.ceil(totalComments / limit) : 1, // Total number of pages
         currentPage: page,
       });
     } catch (error) {
